@@ -15,13 +15,24 @@
  */
 package org.springframework.samples.petclinic.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Owner;
 
 
 public interface OwnerRepository extends JpaRepository<Owner, Integer> {
 
     Owner findById(Integer id);
+    List<Owner> findByFirstNameContainingOrLastNameContaining(String firstName, String lastName);
+    
+    /*Otra opción*/
+    @Query("select o from Owner o where o.firstName like :q% or o.lastName like :q%")
+    List<Owner> searchOwner(@Param("q") String query);
+    
+    List<Owner> findByOrderByLastName();
     
 }
  

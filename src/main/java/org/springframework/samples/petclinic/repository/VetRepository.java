@@ -15,9 +15,23 @@
  */
 package org.springframework.samples.petclinic.repository;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Vet;
 
 public interface VetRepository extends JpaRepository<Vet, Integer> {
+	public Vet findById(int Id);
+	public List<Vet> findByLastName(String lastname);
+	public List<Vet> findByFirstNameAndLastName(String firstname, String lastname);
+	public List<Vet> findByFirstNameOrLastName(String firstname, String lastname);
+
+	/* Lista de veterinarios para la especialidad "radiology" */
+	@Query("select distinct v from Vet v join fetch v.specialties s where s.name=:name")
+	public List<Vet> findBySpecialityName(@Param("name") String name);
 
 }
+
